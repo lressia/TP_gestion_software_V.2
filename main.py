@@ -1,7 +1,5 @@
 from clase import*
 import os.path
-import pickle
-#FUNCIONES BASICAS
 
 
 #Carga y extencion de arrenglo de n registros
@@ -11,32 +9,63 @@ def carga(v):
     else:
         m = open("proyectos.csv", "rt", encoding="utf8")
         largo = os.path.getsize("proyectos.csv")
+        repetidos = []
+        deleteados = 0
+        cargados = 0
         primera_linea = False
         while m.tell() < largo:
-            proyecto = pickle.load(m)
+            atr = m.readline()
+            atr = atr.split("|")
             if primera_linea:
-                # nombre_us = proyecto.nombre_usuario
-                # repositorio = proyecto.repositorio
-                # descripcion = proyecto.descripcion
-                # fecha = proyecto.fecha_actualizacion
-                # lenguaje = proyecto.lenguaje
-                # likes = proyecto.likes
-                # tags = proyecto.tags
-                # url = proyecto.url
-                # sof = Software(nombre_us, repositorio, descripcion, fecha, lenguaje, likes, tags, url)
-                # v.append(proyecto.split("|"))
-                sof = Software(proyecto.split("|"))
-                v.append(sof)
+                if not atr == "" and not atr[4] == "":
+                    if not atr[1] in repetidos:
+                        crear_registro(atr, v)
+                        repetidos.append(atr[1])
+                        cargados += 1
+                    else:
+                        deleteados += 1
+                else:
+                    deleteados += 1
             else:
                 primera_linea = True
+        m.close()
+
+
+def crear_registro(lista, v):
+    nombre_us = lista[0]
+    repositorio = lista[1]
+    descripcion = lista[2]
+    fecha = lista[3]
+    lenguaje = lista[4]
+    likes = lista[5]
+    tags = lista[6]
+    url = lista[7]
+    sof = Software(nombre_us, repositorio, descripcion, fecha, lenguaje, likes, tags, url)
+    v.append(sof)
+
+
+def mostrar(v):
+    for i in range(len(v)):
+        print(to_string(v[i]))
+
+
+#Validar numero positivo
+def validate():
+    n = int(input('llene el campo: '))
+    print()
+    while n <= 0:
+        print("no se permiten numeros negativos")
+        n = int(input('llene el campo: '))
+        print()
+    return n
 
 
 #Mostrar el menu de opciones y validar la seleccion de una opcion
 def menu():
     print()
     print("PROGRAMA GESTOR DE PROYECTOS DE SOFTWARE\n")
-    print("1 - cargar proyectos\n2 - filtrar por tag\n3 - resumen por lenguaje\n4 - popularidad\n\
-    5 - buscar proyecto y actualizarlo\n6 - guardar populares\n7 - mostrar archivo\n0 - salir del programa\n")
+    print("1 - cargar proyectos\n2 - filtrar por tag\n3 - resumen por lenguaje\n4 - popularidad\n" +\
+          "5 - buscar proyecto y actualizarlo\n6 - guardar populares\n7 - mostrar archivo\n0 - salir del programa\n")
     print("ingrese una de las opciones")
     seleccion = validate()
     print()
@@ -73,3 +102,4 @@ def principal():
 
 if __name__ == '__main__':
     principal()
+
