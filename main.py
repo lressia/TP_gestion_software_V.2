@@ -34,14 +34,17 @@ def carga(v):
 def crear_registro(lista, v):
     nombre_us = lista[0]
     repositorio = lista[1]
-    descripcion = lista[2]
     fecha = lista[3]
     lenguaje = lista[4]
-    likes = lista[5]
+
+    li = lista[5].split("k")
+    likes = float(li[0])
+
     tags = lista[6]
     url = lista[7]
-    sof = Software(nombre_us, repositorio, descripcion, fecha, lenguaje, likes, tags, url)
+    sof = proyecto(nombre_us, repositorio, fecha, lenguaje, likes, tags, url)
     v.append(sof)
+
 
 
 def mostrar(v):
