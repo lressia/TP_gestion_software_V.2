@@ -46,7 +46,6 @@ def crear_registro(lista, v):
     v.append(sof)
 
 
-
 def mostrar(v):
     for i in range(len(v)):
         print(to_string(v[i]))
@@ -105,4 +104,5 @@ def principal():
 
 if __name__ == '__main__':
     principal()
+
 
