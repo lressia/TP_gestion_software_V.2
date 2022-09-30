@@ -21,6 +21,9 @@ def conver_estrellas(software):
     rangos = (0, 10, 20, 30, 40)
     estrellas = 0
     for i in range(len(rangos)):
+        if software.likes > 40:
+            estrellas = 5
+            break
         if software.likes <= rangos[i] and software.likes > rangos[i-1]:
             estrellas = i
 
