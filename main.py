@@ -2,7 +2,6 @@ from clase import*
 import os.path
 
 
-#Carga y extencion de arrenglo de n registros
 def carga(v):
     if not os.path.exists("proyectos.csv"):
         print("No existe un archivo a procesar\n")
@@ -29,6 +28,8 @@ def carga(v):
             else:
                 primera_linea = True
         m.close()
+        print("cantidad de elementos cargados: "+str(cargados))
+        print("cantidad de elementos eliminado: "+str(deleteados))
 
 
 def crear_registro(lista, v):
@@ -42,8 +43,8 @@ def crear_registro(lista, v):
 
     tags = lista[6]
     url = lista[7]
-    sof = proyecto(nombre_us, repositorio, fecha, lenguaje, likes, tags, url)
-    v.append(sof)
+    sof = Proyecto(nombre_us, repositorio, fecha, lenguaje, likes, tags, url)
+    add_in_order(v, sof)
 
 
 def mostrar(v):
@@ -51,7 +52,11 @@ def mostrar(v):
         print(to_string(v[i]))
 
 
-#Validar numero positivo
+def mostrar_acotados(v):
+    for i in range(len(v)):
+        print(to_string_acotado(v[i]))
+
+
 def validate():
     n = int(input('llene el campo: '))
     print()
@@ -62,11 +67,81 @@ def validate():
     return n
 
 
-#Mostrar el menu de opciones y validar la seleccion de una opcion
+def add_in_order(vec, reg):
+    n = len(vec)
+    pos = n
+    izq, der = 0, n-1
+    while izq <= der:
+        c = (izq + der) // 2
+        if vec[c].repositorio == reg.repositorio:
+            pos = c
+            break
+        if reg.repositorio < vec[c].repositorio:
+            der = c - 1
+        else:
+            izq = c + 1
+    if izq > der:
+        pos = izq
+
+    vec[pos:pos] = [reg]
+
+
+def buscar(v, cad):
+    encontrados = []
+    for i in v:
+        tupla = i.tags.split(",")
+        for j in tupla:
+            if j == cad:
+                encontrados.append(i)
+    return encontrados
+
+
+def crear_archivo(v):
+    if len(v) == 0:
+        print('Disculpa, no se encontraron datos guardados. Ingrese datos o comuníquese con su administrador')
+        return
+    m = open('filtrados.csv', 'w')
+    linea_1 = "nombre_usuario|repositorio|fecha_actualizacion|lenguaje|estrellas|tags|url"
+    m.write(linea_1)
+    for proyecto in v:
+        m.write(to_string(proyecto))
+    m.close()
+
+
+def to_month(reg):
+    fecha = reg.fecha_actualizacion.split("-")
+    mes = int(fecha[1])
+    return mes
+
+
+def generar_matriz(v):
+    filas, columnas = 12, 5
+    matrix = [[0] * columnas for i in range(filas)]
+    for i in v:
+        mes = to_month(i)
+        estrellas = conver_estrellas(i)
+        matrix[mes-1][estrellas-1] += 1
+
+    return matrix
+
+
+def mostrar_matriz(matriz):
+    mes = 0
+    meses = ("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+             "Octubre", "Noviembre", "Diciembre")
+    print("{:<13}".format("Estrellas")+"1   "+"2   "+"3   "+"4   "+"5   ")
+    print("-"*32)
+    for i in matriz:
+        print("{:<11}".format(meses[mes])+"| "+"{:<4}".format(i[0])+"{:<4}".format(i[1])+"{:<4}".format(i[2]) +
+              "{:<4}".format(i[3])+"{:<4}".format(i[4]))
+        mes += 1
+    print("\n\n")
+
+
 def menu():
     print()
     print("PROGRAMA GESTOR DE PROYECTOS DE SOFTWARE\n")
-    print("1 - cargar proyectos\n2 - filtrar por tag\n3 - resumen por lenguaje\n4 - popularidad\n" +\
+    print("1 - cargar proyectos\n2 - filtrar por tag\n3 - resumen por lenguaje\n4 - popularidad\n" +
           "5 - buscar proyecto y actualizarlo\n6 - guardar populares\n7 - mostrar archivo\n0 - salir del programa\n")
     print("ingrese una de las opciones")
     seleccion = validate()
@@ -77,7 +152,6 @@ def menu():
     return seleccion
 
 
-#Gestionar el programa
 def principal():
     s = None
     registros = []
@@ -87,11 +161,31 @@ def principal():
             carga(registros)
         else:
             if s == 2:
-                mostrar(registros)
+                cad = input("Ingrese el tag que desea buscar")
+                encontrados = buscar(registros, cad)
+                mostrar_acotados(encontrados)
+                print('¿Desea guardar este archivo?')
+                print('Ingrese 1 para continuar')
+                op = validate()
+                if op == 1:
+                    crear_archivo(registros)
             elif s == 3:
                 pass
+
             elif s == 4:
-                pass
+                total = 0
+                matriz = generar_matriz(registros)
+                mostrar_matriz(matriz)
+                print("ingrese el numero de mes que desea resumir")
+                m = validate()
+                while m > 12:
+                    print("ingrese un mes valido")
+                    m = validate()
+                    print()
+                for i in matriz[m-1]:
+                    total += i
+                print("el total de proyectos actualizados en el mes ", m, " es: ", total)
+
             elif s == 5:
                 pass
             elif s == 6:
@@ -104,5 +198,4 @@ def principal():
 
 if __name__ == '__main__':
     principal()
-
 
