@@ -154,12 +154,18 @@ def menu():
 
 def principal():
     s = None
+    bandera_carga = False
     registros = []
     while s != 0:
         s = menu()
         if s == 1:
-            carga(registros)
-        else:
+            if bandera_carga:
+                print("Ya se cargo el arreglo de registros, no puede cargar otro\n")
+            else:
+                carga(registros)
+                bandera_carga = True
+        
+        elif bandera_carga:
             if s == 2:
                 cad = input("Ingrese el tag que desea buscar")
                 encontrados = buscar(registros, cad)
@@ -192,9 +198,10 @@ def principal():
                 pass
             elif s == 7:
                 pass
+        else:
+            print("Debe cargar el arreglo en la opcion 1 para acceder a las demas opciones\n")
         if s == 0:
             print("hasta luego")
-
 
 if __name__ == '__main__':
     principal()
