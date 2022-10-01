@@ -4,6 +4,7 @@ import pickle
 import datetime
 
 
+# Carga y generacion del vector de registros
 def carga(v):
     if not os.path.exists("proyectos.csv"):
         print("No existe un archivo a procesar\n")
@@ -88,17 +89,6 @@ def add_in_order(vec, reg):
     vec[pos:pos] = [reg]
 
 
-def buscar_tag(v, cad):
-    encontrados = []
-    for i in v:
-        lista = i.tags.split(",")
-        for j in lista:
-            if j == cad:
-                encontrados.append(i)
-                break
-    return encontrados
-
-
 def busqueda_bin(vec, ref):
     n = len(vec)
     izq, der = 0, n - 1
@@ -115,12 +105,26 @@ def busqueda_bin(vec, ref):
     print("No se encontro ningun proyecto con el repositorio ", ref)
 
 
+# Funcion punto 2
+def buscar_tag(v, cad):
+    encontrados = []
+    for i in v:
+        lista = i.tags.split(",")
+        for j in lista:
+            if j == cad:
+                encontrados.append(i)
+                break
+    return encontrados
+
+
+# Funcion punto 5
 def act_url_fecha(vec, pos):
     url = input("Ingrese una nueva url para este proyecto\n")
     vec[pos].url, vec[pos].fecha_actualizacion = url, str(datetime.datetime.utcnow()).split(" ")[0]
     print(to_string(vec[pos]))
 
 
+# CREACION DE ARCHIVOS
 def crear_archivo_text(v):
     if len(v) == 0:
         print('Disculpa, no se encontraron datos guardados. Ingrese datos o comuníquese con su administrador')
@@ -143,6 +147,7 @@ def crear_archivo_bin(vec):
     m.close()
 
 
+# FUNCIONES DE MATRIZ PUNTO 4
 def to_month(reg):
     fecha = reg.fecha_actualizacion.split("-")
     mes = int(fecha[1])
@@ -173,19 +178,34 @@ def mostrar_matriz(matriz):
     print("\n\n")
 
 
+# FUNCIONES MATRIZ PUNTO 6 Y 7
 def guardar_matriz(mat):
     registro = []
-    meses = ("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
-             "Octubre", "Noviembre", "Diciembre")
-    estrellas = ("1", "2", "3", "4", "5")
+    # meses = ("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+    #          "Octubre", "Noviembre", "Diciembre")
+    # estrellas = ("1", "2", "3", "4", "5")
     for i in range(len(mat)):
         for j in range(len(mat[i])):
             if mat[i][j] > 0:
-                registro.append(Resumen(meses[i], estrellas[j], mat[i][j]))
+                registro.append(Resumen(i, j, mat[i][j]))
     if len(registro) > 0:
         crear_archivo_bin(registro)
 
 
+def generar_mostrar_matriz_de_archivo():
+    if os.path.exists("tabla.dat"):
+        filas, columnas = 12, 5
+        matrix = [[0] * columnas for i in range(filas)]
+        m = open("tabla.dat", "rb")
+        largo = os.path.getsize("tabla.dat")
+        while m.tell() < largo:
+            elemento = pickle.load(m)
+            matrix[elemento.mes][elemento.estrellas] += elemento.cantidad
+        m.close()
+        mostrar_matriz(matrix)
+
+
+# Menu de opciones y funcion principal que gestiona el programa
 def menu():
     print()
     print("PROGRAMA GESTOR DE PROYECTOS DE SOFTWARE\n")
@@ -251,7 +271,7 @@ def principal():
                 else:
                     print("Debe pasar por el punto 4 para generar los datos requeridos en esta opcion")
             elif s == 7:
-                pass
+                generar_mostrar_matriz_de_archivo()
         else:
             print("Debe cargar el arreglo en la opcion 1 para acceder a las demas opciones\n")
         if s == 0:
@@ -260,6 +280,7 @@ def principal():
 
 if __name__ == '__main__':
     principal()
+
 
 
 
