@@ -220,7 +220,7 @@ def menu():
 def lenguaje(vec):
     lenguajes = []
     aux = [0] * 39
-    # ESTA PARTE SIRVE PARA OBTENER LA CANTIDAD DE LENGUAJES QUE HAY EN EL ARCHIVO .CSV Q LUEGO USÉ PARA EL ARREGLO DE ARRIBA(SI QUERES BORRALA O DEJALA)
+    # ESTA PARTE SIRVE PARA OBTENER LA CANTIDAD DE LENGUAJES QUE HAY EN EL ARCHIVO .CSV Q LUEGO USÉ PARA EL ARREGLO DE ARRIBA
     flag = False
     for leng in vec:
         for j in lenguajes:
@@ -231,7 +231,7 @@ def lenguaje(vec):
                 break
         if not flag:
             lenguajes.append(leng.lenguaje)
-    # print(lenguajes)
+
     # Contador de proyectos por lenguajes
     for leng in vec:
         for j in range(len(lenguajes)):
