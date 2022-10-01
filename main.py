@@ -124,7 +124,7 @@ def crear_archivo(v):
     if len(v) == 0:
         print('Disculpa, no se encontraron datos guardados. Ingrese datos o comuníquese con su administrador')
         return
-    m = open('filtrados.csv', 'w')
+    m = open('filtrados.dat', 'w')
     linea_1 = "nombre_usuario|repositorio|fecha_actualizacion|lenguaje|estrellas|tags|url"
     m.write(linea_1)
     for proyecto in v:
