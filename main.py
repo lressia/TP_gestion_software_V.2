@@ -218,21 +218,19 @@ def menu():
     return seleccion
 
 def lenguaje(vec):
-    lenguajes = ['CSS', 'Swift', 'JavaScript', 'Objective-C', 'Java', 'HTML', 'Assembly', 'C', 'Objective-C++', 'C++', 'PHP', 'Ruby', 'C#', 'Python',
-                 'TypeScript', 'Clojure', 'Shell', 'Jupyter Notebook', 'CoffeeScript', 'Vim script', 'Scala', 'Kotlin', 'TeX', 'Elixir',
-                 'Go', 'PowerShell', 'Crystal', 'Matlab', 'Perl', 'Vue', 'OCaml', 'PureBasic', 'Rascal', 'Julia', 'Lua', 'Haskell', 'Batchfile', 'Rust', 'Emacs Lisp']
+    lenguajes = []
     aux = [0] * 39
     # ESTA PARTE SIRVE PARA OBTENER LA CANTIDAD DE LENGUAJES QUE HAY EN EL ARCHIVO .CSV Q LUEGO USÉ PARA EL ARREGLO DE ARRIBA(SI QUERES BORRALA O DEJALA)
-    # flag = False
-    # for leng in vec:
-    #     for j in lenguajes:
-    #         if leng.lenguaje != j:
-    #             flag = False
-    #         else:
-    #             flag = True
-    #             break
-    #     if not flag:
-    #         lenguajes.append(leng.lenguaje)
+    flag = False
+    for leng in vec:
+        for j in lenguajes:
+            if leng.lenguaje != j:
+                flag = False
+            else:
+                flag = True
+                break
+        if not flag:
+            lenguajes.append(leng.lenguaje)
     # print(lenguajes)
     # Contador de proyectos por lenguajes
     for leng in vec:
