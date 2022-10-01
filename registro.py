@@ -9,6 +9,13 @@ class Proyecto:
         self.url = url
 
 
+class Resumen:
+    def __init__(self, mes, estrellas, cantidad):
+        self.mes = mes
+        self.estrellas = estrellas
+        self.cantidad = cantidad
+
+
 def to_string(software):
     res = "Nombre de usuario: "+str(software.nombre_usuario)+" | Repositorio: "+str(software.repositorio) +\
           " | Fecha de actualizacion: "+str(software.fecha_actualizacion)+" | Lenguaje: "+str(software.lenguaje) +\
