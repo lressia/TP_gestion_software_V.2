@@ -1,5 +1,6 @@
 from clase import*
 import os.path
+import pickle
 import datetime
 
 
@@ -61,7 +62,7 @@ def mostrar_acotados(v):
 def validate():
     n = int(input('llene el campo: '))
     print()
-    while n <= 0:
+    while n < 0:
         print("no se permiten numeros negativos")
         n = int(input('llene el campo: '))
         print()
@@ -120,7 +121,7 @@ def act_url_fecha(vec, pos):
     print(to_string(vec[pos]))
 
 
-def crear_archivo(v):
+def crear_archivo_text(v):
     if len(v) == 0:
         print('Disculpa, no se encontraron datos guardados. Ingrese datos o comuníquese con su administrador')
         return
@@ -129,6 +130,16 @@ def crear_archivo(v):
     m.write(linea_1)
     for proyecto in v:
         m.write(to_string(proyecto))
+    m.close()
+
+
+def crear_archivo_bin(vec):
+    if len(vec) == 0:
+        print("Disculpe, no se encontraron datos para almecenar")
+        return
+    m = open("tabla.dat", "wb")
+    for i in vec:
+        pickle.dump(i, m)
     m.close()
 
 
@@ -154,12 +165,25 @@ def mostrar_matriz(matriz):
     meses = ("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
              "Octubre", "Noviembre", "Diciembre")
     print("{:<13}".format("Estrellas")+"1   "+"2   "+"3   "+"4   "+"5   ")
-    print("-"*32)
+    print("-"*31)
     for i in matriz:
         print("{:<11}".format(meses[mes])+"| "+"{:<4}".format(i[0])+"{:<4}".format(i[1])+"{:<4}".format(i[2]) +
               "{:<4}".format(i[3])+"{:<4}".format(i[4]))
         mes += 1
     print("\n\n")
+
+
+def guardar_matriz(mat):
+    registro = []
+    meses = ("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+             "Octubre", "Noviembre", "Diciembre")
+    estrellas = ("1", "2", "3", "4", "5")
+    for i in range(len(mat)):
+        for j in range(len(mat[i])):
+            if mat[i][j] > 0:
+                registro.append(Resumen(meses[i], estrellas[j], mat[i][j]))
+    if len(registro) > 0:
+        crear_archivo_bin(registro)
 
 
 def menu():
@@ -180,6 +204,7 @@ def principal():
     s = None
     bandera_carga = False
     registros = []
+    matriz = []
     while s != 0:
         s = menu()
         if s == 1:
@@ -198,7 +223,7 @@ def principal():
                 print('Ingrese 1 para continuar')
                 op = validate()
                 if op == 1:
-                    crear_archivo(encontrados)
+                    crear_archivo_text(encontrados)
             elif s == 3:
                 pass
 
@@ -221,7 +246,10 @@ def principal():
                 pos = busqueda_bin(registros, rep)
                 act_url_fecha(registros, pos)
             elif s == 6:
-                pass
+                if len(matriz) > 0:
+                    guardar_matriz(matriz)
+                else:
+                    print("Debe pasar por el punto 4 para generar los datos requeridos en esta opcion")
             elif s == 7:
                 pass
         else:
@@ -232,5 +260,6 @@ def principal():
 
 if __name__ == '__main__':
     principal()
+
 
 
