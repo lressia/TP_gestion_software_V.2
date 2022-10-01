@@ -11,8 +11,8 @@ class Proyecto:
 
 def to_string(software):
     res = "Nombre de usuario: "+str(software.nombre_usuario)+" | Repositorio: "+str(software.repositorio) +\
-          " | Fecha de actualizacion: "+software.fecha_actualizacion+" | Lenguaje: "+software.lenguaje +\
-          " | Likes: "+str(software.likes)+" | Tags: "+str(software.tags)+" | URL: "+str(software.url)
+          " | Fecha de actualizacion: "+str(software.fecha_actualizacion)+" | Lenguaje: "+str(software.lenguaje) +\
+          " | Likes: "+str(software.likes)+"K"+" | Tags: "+str(software.tags)+" | URL: "+str(software.url)
 
     return res
 
