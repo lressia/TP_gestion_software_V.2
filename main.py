@@ -1,7 +1,5 @@
-from clase import*
-import os.path
-import pickle
-import datetime
+from register import *
+import os.path, pickle, datetime
 
 
 # Carga y generacion del vector de registros
@@ -219,6 +217,37 @@ def menu():
         seleccion = validate()
     return seleccion
 
+def lenguaje(vec):
+    lenguajes = ['CSS', 'Swift', 'JavaScript', 'Objective-C', 'Java', 'HTML', 'Assembly', 'C', 'Objective-C++', 'C++', 'PHP', 'Ruby', 'C#', 'Python',
+                 'TypeScript', 'Clojure', 'Shell', 'Jupyter Notebook', 'CoffeeScript', 'Vim script', 'Scala', 'Kotlin', 'TeX', 'Elixir',
+                 'Go', 'PowerShell', 'Crystal', 'Matlab', 'Perl', 'Vue', 'OCaml', 'PureBasic', 'Rascal', 'Julia', 'Lua', 'Haskell', 'Batchfile', 'Rust', 'Emacs Lisp']
+    aux = [0] * 39
+    # ESTA PARTE SIRVE PARA OBTENER LA CANTIDAD DE LENGUAJES QUE HAY EN EL ARCHIVO .CSV Q LUEGO USÉ PARA EL ARREGLO DE ARRIBA(SI QUERES BORRALA O DEJALA)
+    # flag = False
+    # for leng in vec:
+    #     for j in lenguajes:
+    #         if leng.lenguaje != j:
+    #             flag = False
+    #         else:
+    #             flag = True
+    #             break
+    #     if not flag:
+    #         lenguajes.append(leng.lenguaje)
+    # print(lenguajes)
+    # Contador de proyectos por lenguajes
+    for leng in vec:
+        for j in range(len(lenguajes)):
+            if leng.lenguaje == lenguajes[j]:
+                aux[j] += 1
+    # Ordenar de mayor a menor
+    for i in range(len(aux)):
+        for j in range(len(aux)):
+            if aux[i] > aux[j]:
+                aux[i], aux[j] = aux[j], aux[i]
+    # Impresion de la lista
+    for j in range(len(lenguajes)):
+        print(f'{lenguajes[j]}- {aux[j]}')
+
 
 def principal():
     s = None
@@ -245,8 +274,7 @@ def principal():
                 if op == 1:
                     crear_archivo_text(encontrados)
             elif s == 3:
-                pass
-
+                lenguaje(registros)
             elif s == 4:
                 total = 0
                 matriz = generar_matriz(registros)
@@ -280,7 +308,3 @@ def principal():
 
 if __name__ == '__main__':
     principal()
-
-
-
-
