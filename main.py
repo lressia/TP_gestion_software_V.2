@@ -1,5 +1,6 @@
 from clase import*
 import os.path
+import datetime
 
 
 def carga(v):
@@ -86,14 +87,37 @@ def add_in_order(vec, reg):
     vec[pos:pos] = [reg]
 
 
-def buscar(v, cad):
+def buscar_tag(v, cad):
     encontrados = []
     for i in v:
-        tupla = i.tags.split(",")
-        for j in tupla:
+        lista = i.tags.split(",")
+        for j in lista:
             if j == cad:
                 encontrados.append(i)
+                break
     return encontrados
+
+
+def busqueda_bin(vec, ref):
+    n = len(vec)
+    izq, der = 0, n - 1
+    while izq <= der:
+        c = (izq + der) // 2
+        if vec[c].repositorio == ref:
+            print("Se encontro el proyecto")
+            print(to_string(vec[c]))
+            return c
+        if ref < vec[c].repositorio:
+            der = c - 1
+        else:
+            izq = c + 1
+    print("No se encontro ningun proyecto con el repositorio ", ref)
+
+
+def act_url_fecha(vec, pos):
+    url = input("Ingrese una nueva url para este proyecto\n")
+    vec[pos].url, vec[pos].fecha_actualizacion = url, str(datetime.datetime.utcnow()).split(" ")[0]
+    print(to_string(vec[pos]))
 
 
 def crear_archivo(v):
@@ -164,17 +188,17 @@ def principal():
             else:
                 carga(registros)
                 bandera_carga = True
-        
+
         elif bandera_carga:
             if s == 2:
                 cad = input("Ingrese el tag que desea buscar")
-                encontrados = buscar(registros, cad)
+                encontrados = buscar_tag(registros, cad)
                 mostrar_acotados(encontrados)
-                print('¿Desea guardar este archivo?')
+                print('¿Desea guardar este listado en un archivo?')
                 print('Ingrese 1 para continuar')
                 op = validate()
                 if op == 1:
-                    crear_archivo(registros)
+                    crear_archivo(encontrados)
             elif s == 3:
                 pass
 
@@ -193,7 +217,9 @@ def principal():
                 print("el total de proyectos actualizados en el mes ", m, " es: ", total)
 
             elif s == 5:
-                pass
+                rep = input("Ingrese el repositorio del proyecto que desea buscar")
+                pos = busqueda_bin(registros, rep)
+                act_url_fecha(registros, pos)
             elif s == 6:
                 pass
             elif s == 7:
@@ -203,6 +229,8 @@ def principal():
         if s == 0:
             print("hasta luego")
 
+
 if __name__ == '__main__':
     principal()
+
 
